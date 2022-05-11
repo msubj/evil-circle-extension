@@ -8,9 +8,12 @@ html {
 }
 
 body {
-  overflow: hidden;
   height: inherit;
+  overflow: hidden;
+ /* line-height: 0px;*/
 }
+
+
 
 h1 {
   font-size: 2rem;
@@ -19,15 +22,46 @@ h1 {
   margin: 0;
   top: -4px;
   right: 5px;
-
   color: transparent;
-  text-shadow: 0 0 4px white;
+  text-shadow: 0 0 2px white;
 }
 
-p {
+.score {
+  position: absolute;
+  margin: 0;
+  top: 35px;
+  right: 140px;
+  width: 120px;
+  padding: 5px;
+  color: rgb(82, 82, 82);
+  background-color: aquamarine;
+  text-align: center;
+}
+
+.timer {
   position: absolute;
   margin: 0;
   top: 35px;
   right: 5px;
-  color: #aaa;
+  width: 120px;
+  padding: 5px;
+  color: rgb(82, 82, 82);
+  background-color: aquamarine;
+  text-align: center;
+}
+
+
+.game-menu {
+  position: absolute;
+  top: 40%;
+  left: 45%;
+}
+
+.start-button{
+  background-color: crimson;
+  color: beige;
+  border: 1px solid darkgray;
+  border-radius: 2px;
+  width: 150px;
+  height: 30px;
 }

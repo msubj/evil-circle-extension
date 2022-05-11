@@ -1,15 +1,18 @@
-// setup canvas
-
-
-
-
+// setup 
 
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
-const para = document.querySelector('p');
+const para = document.querySelector('.score');
+const startButton = document.querySelector('.start-button');
+const paraTime = document.querySelector('.timer');
 
 const width = canvas.width = window.innerWidth;
 const height = canvas.height = window.innerHeight;
+
+//initial canvas style
+
+ctx.fillStyle = 'rgb(0, 0, 0)';
+ctx.fillRect(0, 0, width, height);
 
 let ballCount = 0;
 
@@ -19,6 +22,9 @@ function random(min, max) {
   const num = Math.floor(Math.random() * (max - min + 1)) + min;
   return num;
 }
+
+//objects definitions
+
 
 function Shape(x, y, velX, velY, exists) {
     this.x = x;
@@ -45,6 +51,8 @@ function Shape(x, y, velX, velY, exists) {
   }
   EvilCircle.prototype = Object.create(Shape.prototype);
   EvilCircle.prototype.constructor = EvilCircle;
+
+  //methods
 
   Ball.prototype.draw = function() {
     ctx.beginPath();
@@ -172,6 +180,10 @@ para.textContent += ballCount;
 let evilCircle = new EvilCircle(20,20,true);
 evilCircle.setControls(); 
 
+let startingTime;
+
+//animation
+
 function loop() {
     ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
     ctx.fillRect(0, 0, width, height);
@@ -192,9 +204,30 @@ function loop() {
         evilCircle.draw();
         evilCircle.checkBounds();
         evilCircle.collisionDetect();
-  
+
+    updateTime(Date.now()); 
     requestAnimationFrame(loop);
   }
 
-  loop();
+  startButton.addEventListener('click', ()=>{
+    startButton.disabled = true; 
+    startButton.style.display = 'none';  
+    startingTime = Date.now();
+    console.log(startingTime);
+    loop();
+    
+  }
+  );
 
+ // loop();
+
+function updateTime(time){
+  const diff =  Math.floor((time- startingTime)/1000);
+  if (diff >= 120) paraTime.textContent = 'Time: 00:00';
+    else if (diff>0) {
+      let seconds = (120 - diff)%60;
+      let minutes = 1- (Math.floor(diff/60));
+      paraTime.textContent = 'Time: 0'+minutes+':'+seconds.toString().padStart(2, '0');
+    }
+
+}
