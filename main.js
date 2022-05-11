@@ -5,6 +5,8 @@ const ctx = canvas.getContext('2d');
 const para = document.querySelector('.score');
 const startButton = document.querySelector('.start-button');
 const paraTime = document.querySelector('.timer');
+const killButton = document.querySelector('.kill-button');
+const endMenu = document.querySelector('.game-menu');
 
 const width = canvas.width = window.innerWidth;
 const height = canvas.height = window.innerHeight;
@@ -206,28 +208,40 @@ function loop() {
         evilCircle.collisionDetect();
 
     updateTime(Date.now()); 
-    requestAnimationFrame(loop);
+    animation = requestAnimationFrame(loop);
   }
 
   startButton.addEventListener('click', ()=>{
-    startButton.disabled = true; 
-    startButton.style.display = 'none';  
+    endMenu.style.display = 'none'; 
+    paraTime.textContent = 'Time: 02:00'; 
     startingTime = Date.now();
-    console.log(startingTime);
+    killButton.style.display = 'block';
     loop();
     
   }
   );
 
- // loop();
+ killButton.addEventListener('click',endGame);
 
 function updateTime(time){
   const diff =  Math.floor((time- startingTime)/1000);
-  if (diff >= 120) paraTime.textContent = 'Time: 00:00';
+  if (diff >= 120) {
+    paraTime.textContent = 'Time: 00:00';
+    endGame();
+  }
     else if (diff>0) {
       let seconds = (120 - diff)%60;
       let minutes = 1- (Math.floor(diff/60));
       paraTime.textContent = 'Time: 0'+minutes+':'+seconds.toString().padStart(2, '0');
     }
 
+}
+
+function endGame(){
+ cancelAnimationFrame(animation);
+ killButton.style.display = 'none';
+ endMenu.style.display = 'block';
+
+ctx.fillStyle = 'rgb(0, 0, 0)';
+ctx.fillRect(0, 0, width, height);
 }
