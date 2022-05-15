@@ -2,21 +2,37 @@
 
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
+
 const para = document.querySelector('.score');
-const startButton = document.querySelector('.start-button');
+const paraDefault =para.textContent;
+
+const paraHighest = document.querySelector('.highest-score');
+
+
+
+
 const paraTime = document.querySelector('.timer');
+
+const startButton = document.querySelector('.start-button');
 const killButton = document.querySelector('.kill-button');
 const endMenu = document.querySelector('.game-menu');
 
 const width = canvas.width = window.innerWidth;
 const height = canvas.height = window.innerHeight;
 
+let prevHighest = localStorage.getItem('highest-score');
+if(prevHighest) paraHighest.textContent += localStorage.getItem('highest-score');
+
+let ballCount = 0;
+let score = 0;
+
 //initial canvas style
 
 ctx.fillStyle = 'rgb(0, 0, 0)';
 ctx.fillRect(0, 0, width, height);
 
-let ballCount = 0;
+
+
 
 // function to generate random number
 
@@ -62,6 +78,8 @@ function Shape(x, y, velX, velY, exists) {
     ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
     ctx.fill();
   }
+
+ //update position
 
   Ball.prototype.update = function() {
     if ((this.x + this.size) >= width) {
@@ -148,15 +166,19 @@ function Shape(x, y, velX, velY, exists) {
   
         if (distance < this.size + balls[j].size) {
           balls[j].exists = false;
-          let ballCount0 = ballCount--;
-          para.textContent  = para.textContent.replace(ballCount0,ballCount);
+           ballCount--;
+          para.textContent  = para.textContent.replace(score,++score);
         }
       }
     }
   }
 
+let balls = [];
 
-  let balls = [];
+//game
+
+function game(){ 
+  
 
 while (balls.length < 25) {
   let size = random(10,20);
@@ -176,7 +198,8 @@ while (balls.length < 25) {
 }
 
 ballCount = balls.length;
-para.textContent += ballCount; 
+score = 0;
+para.textContent += score; 
 
 
 let evilCircle = new EvilCircle(20,20,true);
@@ -207,21 +230,35 @@ function loop() {
         evilCircle.checkBounds();
         evilCircle.collisionDetect();
 
-    updateTime(Date.now()); 
+    
     animation = requestAnimationFrame(loop);
+    updateTime(Date.now()); 
   }
+  loop();
+}
+
+//buttons event listeners
 
   startButton.addEventListener('click', ()=>{
     endMenu.style.display = 'none'; 
+
     paraTime.textContent = 'Time: 02:00'; 
+    para.textContent = paraDefault;
+
+    if(paraHighest.classList.contains('new-record')) paraHighest.classList.remove('new-record');
+
+
+    balls= [];
     startingTime = Date.now();
     killButton.style.display = 'block';
-    loop();
+    game();
     
   }
   );
 
  killButton.addEventListener('click',endGame);
+
+ // time update
 
 function updateTime(time){
   const diff =  Math.floor((time- startingTime)/1000);
@@ -237,11 +274,27 @@ function updateTime(time){
 
 }
 
+//end game 
+
 function endGame(){
  cancelAnimationFrame(animation);
  killButton.style.display = 'none';
  endMenu.style.display = 'block';
 
+ if(!prevHighest){
+  localStorage.setItem('highest-score', score);
+  paraHighest += score;
+ }
+ else if(score > prevHighest) {
+   paraHighest.textContent =  paraHighest.textContent.replace(prevHighest, score);
+   paraHighest.classList.add('new-record');
+
+   localStorage.setItem('highest-score', score);
+   prevHighest = score;
+
+ }
+
 ctx.fillStyle = 'rgb(0, 0, 0)';
 ctx.fillRect(0, 0, width, height);
+
 }

@@ -26,29 +26,57 @@ h1 {
   text-shadow: 0 0 2px white;
 }
 
-.score {
-  position: absolute;
-  margin: 0;
-  top: 35px;
-  right: 140px;
-  width: 120px;
-  padding: 5px;
-  color: rgb(82, 82, 82);
-  background-color: aquamarine;
-  text-align: center;
-}
-
-.timer {
+.info-wrapper{
   position: absolute;
   margin: 0;
   top: 35px;
   right: 5px;
+  max-width: calc(100vw - 200px);
+  padding: 5px;
+  color: rgb(82, 82, 82);
+  background-color: red;
+  text-align: center;
+  display: flex;
+
+}
+
+.info{
+  margin: 0;
   width: 120px;
   padding: 5px;
   color: rgb(82, 82, 82);
   background-color: aquamarine;
   text-align: center;
+
 }
+
+/* new record animation*/
+
+@keyframes flash {
+  from {
+    color: crimson;
+  }
+
+  50% {
+    color: rgb(220, 20, 60, 0);
+  }
+
+  to {
+    color:crimson;
+  }
+
+}
+
+
+.highest-score {
+  width: 180px;
+}
+
+.new-record{
+  color: crimson;
+  animation: 1s 3 flash;
+}
+
 
 
 .game-menu {
@@ -57,12 +85,16 @@ h1 {
   left: 45%;
 }
 
+.menu-item{
+  width: 170px;
+}
+
 .start-button{
   background-color: crimson;
   color: beige;
   border: 1px solid darkgray;
   border-radius: 2px;
-  width: 150px;
+  width: 180px;
   height: 30px;
 }
 
@@ -77,4 +109,8 @@ h1 {
   width: 150px;
   height: 30px;
   display: none;
+}
+
+button:hover{
+  background-color: rgb(150,0,50);
 }
