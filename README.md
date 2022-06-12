@@ -15,4 +15,4 @@ The (planned) additions:
 ## Levels
 
 - the number of balls increase with each level
-- the speed of the balls is not random but increase with each level
+- the speed of the balls depends on the level

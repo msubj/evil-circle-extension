@@ -4,34 +4,35 @@ const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 
 const para = document.querySelector('.score');
-const paraDefault =para.textContent;
+const paraLevel = document.querySelector('.level');
 
 const paraHighest = document.querySelector('.highest-score');
-
-
-
-
 const paraTime = document.querySelector('.timer');
+
+paraDefault = para.textContent;
+paraTimeDefault = paraTime.textContent
+paraLevelDefault = paraLevel.textContent;
 
 const startButton = document.querySelector('.start-button');
 const killButton = document.querySelector('.kill-button');
 const endMenu = document.querySelector('.game-menu');
 
 const width = canvas.width = window.innerWidth;
-const height = canvas.height = window.innerHeight;
+const height = canvas.height = window.innerHeight-100;
+
+//local storage
 
 let prevHighest = localStorage.getItem('highest-score');
 if(prevHighest) paraHighest.textContent += localStorage.getItem('highest-score');
 
 let ballCount = 0;
 let score = 0;
+let level = 1;
 
 //initial canvas style
 
 ctx.fillStyle = 'rgb(0, 0, 0)';
 ctx.fillRect(0, 0, width, height);
-
-
 
 
 // function to generate random number
@@ -102,6 +103,8 @@ function Shape(x, y, velX, velY, exists) {
     this.y += this.velY;
   }
 
+  //ball collision - add physics?
+
   Ball.prototype.collisionDetect = function() {
     for (let j = 0; j < balls.length; j++) {
       if (!(this === balls[j]) && balls[j].exists) {
@@ -110,7 +113,8 @@ function Shape(x, y, velX, velY, exists) {
         const distance = Math.sqrt(dx * dx + dy * dy);
   
         if (distance < this.size + balls[j].size) {
-          balls[j].color = this.color = 'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) +')';
+          //enough color contrast with background
+          balls[j].color = this.color = 'rgb(' + random(95, 255) + ',' + random(95, 255) + ',' + random(95, 255) +')';
         }
       }
     }
@@ -145,13 +149,13 @@ function Shape(x, y, velX, velY, exists) {
   EvilCircle.prototype.setControls = function(){
     let _this = this;
     window.onkeydown = function(e) {
-        if (e.key === 'a') {
+        if (e.code === 'KeyA' || e.code === "ArrowLeft" ) {
           _this.x -= _this.velX;
-        } else if (e.key === 'd') {
+        } else if (e.code === 'KeyD' || e.code === "ArrowRight") {
           _this.x += _this.velX;
-        } else if (e.key === 'w') {
+        } else if (e.code === 'KeyW' || e.code === "ArrowUp") {
           _this.y -= _this.velY;
-        } else if (e.key === 's') {
+        } else if (e.code === 'KeyS' || e.code === "ArrowDown") {
           _this.y += _this.velY;
         }
       }
@@ -173,50 +177,50 @@ function Shape(x, y, velX, velY, exists) {
     }
   }
 
-let balls = [];
+
 
 //game
+let balls = [];
 
 function game(){ 
-  
+  balls = [];
 
-while (balls.length < 25) {
-  let size = random(10,20);
-  let ball = new Ball(
-    // ball position always drawn at least one ball width
-    // away from the edge of the canvas, to avoid drawing errors
-    random(0 + size,width - size),
-    random(0 + size,height - size),
-    random(-7,7),
-    random(-7,7),
-    true,
-    'rgb(' + random(0,255) + ',' + random(0,255) + ',' + random(0,255) +')',
-    size
-  );
+  while (balls.length < level) {
+    let size = 15;
+    let ball = new Ball(
+      // ball position always drawn at least one ball width
+      // away from the edge of the canvas, to avoid drawing errors
+      random(0 + size,width - size),
+      random(0 + size,height - size),
+      random(-level/2 + 1,level/2 + 1),
+      random(-level,level),
+      true,
+      'rgb(' + random(95,255) + ',' + random(95,255) + ',' + random(95,255) +')',
+      size
+    );
 
-  balls.push(ball);
-}
+    balls.push(ball);
+  }
 
-ballCount = balls.length;
-score = 0;
-para.textContent += score; 
+  ballCount = balls.length;
 
 
-let evilCircle = new EvilCircle(20,20,true);
-evilCircle.setControls(); 
 
-let startingTime;
+  let evilCircle = new EvilCircle(20,20,true);
+  evilCircle.setControls(); 
 
-//animation
+  loop();
 
-function loop() {
+  //animation
+
+  function loop() {
     ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
     ctx.fillRect(0, 0, width, height);
-   
-  
+ 
+
     for (let i = 0; i < balls.length; i++) {
       if(balls[i].exists) {
-        
+      
         balls[i].draw();
         balls[i].update();
         balls[i].collisionDetect();
@@ -224,43 +228,34 @@ function loop() {
       }
 
 
- }
+    } 
 
-        evilCircle.draw();
-        evilCircle.checkBounds();
-        evilCircle.collisionDetect();
+    evilCircle.draw();
+    evilCircle.checkBounds();
+    evilCircle.collisionDetect();
 
-    
+  
     animation = requestAnimationFrame(loop);
+    if(ballCount===0) updateLevel();
+
     updateTime(Date.now()); 
   }
-  loop();
+
 }
 
-//buttons event listeners
+//update level
+ 
+function updateLevel(){
+  cancelAnimationFrame(animation);
+  paraLevel.textContent = paraLevel.textContent.replace(level,++level);
+  if(level>30) endGame();
+  game();
 
-  startButton.addEventListener('click', ()=>{
-    endMenu.style.display = 'none'; 
-
-    paraTime.textContent = 'Time: 02:00'; 
-    para.textContent = paraDefault;
-
-    if(paraHighest.classList.contains('new-record')) paraHighest.classList.remove('new-record');
-
-
-    balls= [];
-    startingTime = Date.now();
-    killButton.style.display = 'block';
-    game();
-    
-  }
-  );
-
- killButton.addEventListener('click',endGame);
+}
 
  // time update
 
-function updateTime(time){
+ function updateTime(time){
   const diff =  Math.floor((time- startingTime)/1000);
   if (diff >= 120) {
     paraTime.textContent = 'Time: 00:00';
@@ -273,6 +268,35 @@ function updateTime(time){
     }
 
 }
+
+//buttons event listeners
+
+  startButton.addEventListener('click', ()=>{
+    endMenu.style.display = 'none'; 
+
+    paraTime.textContent = paraTimeDefault; 
+    para.textContent = paraDefault;
+    paraLevel.textContent = paraLevelDefault;
+
+
+    if(paraHighest.classList.contains('new-record')) paraHighest.classList.remove('new-record');
+
+    score = 0;
+    level = 1;
+
+    para.textContent += score; 
+    paraLevel.textContent += level;
+     
+    startingTime = Date.now();
+    killButton.style.display = 'block';
+    game();
+    
+  }
+  );
+
+ killButton.addEventListener('click',endGame);
+
+
 
 //end game 
 

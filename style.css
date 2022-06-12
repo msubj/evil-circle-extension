@@ -1,4 +1,4 @@
-html, body {
+* {
   margin: 0;
 }
 
@@ -7,48 +7,95 @@ html {
   height: 100%;
 }
 
+
 body {
-  height: inherit;
-  overflow: hidden;
- /* line-height: 0px;*/
+  height: 100%;
+  }
+
+header{
+  height: 100px;
+  background-color: crimson;
 }
 
+main{
+  height: calc(100vh - 100px) ;
+  
+}
 
+canvas{
+  display: block;
+  height: 100%;
+  width: 100%;
+  
+}
 
-h1 {
+h1{
   font-size: 2rem;
   letter-spacing: -1px;
-  position: absolute;
-  margin: 0;
-  top: -4px;
-  right: 5px;
   color: transparent;
   text-shadow: 0 0 2px white;
+  text-align: right;
 }
 
-.info-wrapper{
-  position: absolute;
-  margin: 0;
-  top: 35px;
-  right: 5px;
-  max-width: calc(100vw - 200px);
-  padding: 5px;
+.info-panel{
   color: rgb(82, 82, 82);
-  background-color: red;
+  background-color: rgb(50,50,100);
   text-align: center;
   display: flex;
+  justify-content: end;
 
 }
 
 .info{
-  margin: 0;
-  width: 120px;
+
+  width: 200px;
   padding: 5px;
-  color: rgb(82, 82, 82);
-  background-color: aquamarine;
-  text-align: center;
+  color: white;
+  background-color: rgb(50,50,100);
 
 }
+
+.kill-button{
+  margin: auto;
+  background-color: crimson;
+  color: beige;
+  border: 2px solid rgb(200,190,20);
+  border-radius: 2px;
+  width: 150px;
+  height: 30px;
+  display: none;
+}
+
+.game-menu {
+  position: absolute;
+  top: 40%;
+  left: 45%;
+}
+
+
+.menu-item{
+  width: 170px;
+  background-color: rgb(200,190,20);
+  color: black;
+  text-align: center;
+}
+
+.start-button{
+  background-color: crimson;
+  color: beige;
+  border: 1px solid darkgray;
+  border-radius: 2px;
+  width: 180px;
+  height: 30px;
+}
+
+
+button:hover{
+  background-color: rgb(150,0,50);
+}
+
+
+
 
 /* new record animation*/
 
@@ -68,10 +115,6 @@ h1 {
 }
 
 
-.highest-score {
-  width: 180px;
-}
-
 .new-record{
   color: crimson;
   animation: 1s 3 flash;
@@ -79,38 +122,4 @@ h1 {
 
 
 
-.game-menu {
-  position: absolute;
-  top: 40%;
-  left: 45%;
-}
 
-.menu-item{
-  width: 170px;
-}
-
-.start-button{
-  background-color: crimson;
-  color: beige;
-  border: 1px solid darkgray;
-  border-radius: 2px;
-  width: 180px;
-  height: 30px;
-}
-
-.kill-button{
-  position: absolute;
-  top: 35px;
-  left: 20px;
-  background-color: crimson;
-  color: beige;
-  border: 1px solid darkgray;
-  border-radius: 2px;
-  width: 150px;
-  height: 30px;
-  display: none;
-}
-
-button:hover{
-  background-color: rgb(150,0,50);
-}
