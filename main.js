@@ -1,3 +1,11 @@
+//service workwer
+
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker
+    .register('/sw.js');
+}
+
+
 // setup 
 
 const canvas = document.querySelector('canvas');
@@ -307,7 +315,7 @@ function endGame(){
 
  if(!prevHighest){
   localStorage.setItem('highest-score', score);
-  paraHighest += score;
+  paraHighest.textContent += score;
  }
  else if(score > prevHighest) {
    paraHighest.textContent =  paraHighest.textContent.replace(prevHighest, score);
