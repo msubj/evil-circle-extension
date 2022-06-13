@@ -1,10 +1,10 @@
 # Evil Cirle Extension
 
-The extension to the [MDN JavaScript tutorial assignment](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Adding_bouncing_balls_features).
+The game from [MDN JavaScript tutorial assignment](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Adding_bouncing_balls_features) with some additional features.
 
 -------------------------------------------
 
-The (planned) additions:
+The additions:
 - countdown timer
 - levels
 - highest score storage
