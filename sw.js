@@ -1,13 +1,15 @@
-self.addEventListener('install', e => {
+const cacheName = "evilCirc-store";
 
-    e.waitUntil(
-        caches.open('evilCirc-store').then(cache => { 
-        return cache.addAll(["/", 'index.html', 'main.js', 'style.css']);
-      })
-    );
- });
-
-   self.addEventListener('fetch', e => {
-    e.respondWith(caches.match(e.request).then(response => response || fetch(e.request))
-    );
-  });
+self.addEventListener('fetch', e => {
+ e.respondWith(caches.open(cacheName).then((cache) => {
+   // Go to the network first
+   return fetch(e.request.url).then((fetchedResponse) => {
+     cache.put(e.request, fetchedResponse.clone())
+     return fetchedResponse;
+   }).catch(() => {
+     // If the network is unavailable, get
+     return cache.match(e.request.url);
+   });
+ }));
+});
+ 
