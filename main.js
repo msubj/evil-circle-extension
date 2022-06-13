@@ -1,3 +1,12 @@
+//service workwer
+
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker
+    .register('sw.js');
+    console.log('registerd');
+} 
+
+
 // setup 
 
 const canvas = document.querySelector('canvas');
@@ -103,7 +112,7 @@ function Shape(x, y, velX, velY, exists) {
     this.y += this.velY;
   }
 
-  //ball collision - add physics?
+  //ball collision 
 
   Ball.prototype.collisionDetect = function() {
     for (let j = 0; j < balls.length; j++) {
